@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Galindo&family=Gasoek+One&family=Happy+Monkey&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Quicksand:wght@300..700&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Shrikhand&display=swap" rel="stylesheet">
+<style>
+    body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #ecebeb;
+        font-family: 'Montserrat', cursive;
+        text-align: center;
+        overflow: hidden;
+    }
+
+    #welcome-text {
+        font-size: 3rem;
+        font-weight: bold;
+        color: #2c3e50;
+        text-align: center;
+        display: inline-block;
+        /* Animasi Mengapung */
+        animation: float 3s ease-in-out infinite, colorChange 5s linear infinite;
+        text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Keyframes untuk efek mengapung */
+    @keyframes float {
+        0%, 100% {transform: translateY(0);}
+        50% {transform: translateY(-20px);}
+    }
+
+    /* Keyframes untuk efek perubahan warna */
+    @keyframes colorChange {
+        0% {color: #c0392b;}
+        25% {color: #012780;}
+        50% {color: #8e44ad;}
+        75% {color: #2ecc71;}
+        100% {color: #c0392b;}
+    }
+    /* tombol */
+    .btn-lanjut {
+        display: inline-block;
+        padding: 12px 30px;
+        background-color: #0043df;
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-lanjut:hover {
+        background-color: #c0392b;
+        transform: scale(1.1);
+        box-shadow: 0 6px 20px rgba(192, 57, 43, 0.4);
+    }
+</style>
+</head>
+<body>
+    <h1 id="welcome-text">Halo!</h1>
+
+    <div id="action-container" style="opacity: 0; transition: 2s; margin-top: 30px;">
+        <a href="dashboard1.html" class="btn-lanjut">Lanjut ke Dashboard</a>
+    </div>
+
+    <script>
+        const nama = localStorage.getItem("namaPendaftar");
+        const textElement = document.getElementById("welcome-text");
+        if (nama) {
+            textElement.innerText = "Selamat Datang, " + "di Portal Berita HADAPI PEDIA" + "!";
+            // jalankan fungsi petasan saat halaman dimuat
+            launchConfetti();
+        }
+
+        function launchConfetti() {
+            // Durasi ledakan petasan
+            var duration = 5 * 1000; // 5 detik
+            var end = Date.now() + duration;
+
+            (function frame() {
+                // petasan dari kiri
+                confetti ({
+                    particleCount: 2,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#fc6e6e', '#012780', '#ffffff']
+                });
+                // petasan dari kanan
+                confetti ({
+                    particleCount: 3,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#fc6e6e', '#012780', '#ffffff']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+                    }
+        // Tampilkan tombol setelah 3 detik
+        setTimeout(() => {
+            const container = document.getElementById("action-container");
+            container.style.opacity = "1";    
+        }, 3000);
+    </script>
+    
+</body>
+</html>

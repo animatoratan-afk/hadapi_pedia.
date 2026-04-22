@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rubrik Berita - HadapiPedia</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/dist/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-blue: #093577;
+            --light-bg: #f4f7f6;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--light-bg);
+            padding-top: 100px;
+        }
+
+       /* CSS untuk menyamakan dengan dashboard1.html */
+.navbar {
+    background: white !important;
+    transition: 0.3s;
+}
+
+body.dark-mode .navbar {
+    background-color: #1f1f1f !important;
+    border-bottom: 1px solid #333;
+}
+
+/* Animasi Logo HadapiPedia */
+.logo-animated strong {
+    background: linear-gradient(to right, #b50303, #850c0c, #550303, #b50303);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shine 3s linear infinite;
+}
+
+@keyframes shine {
+    to { background-position: 200% center; }
+}
+
+/* Styling Tombol Dark Mode agar seragam */
+.btn-dark-toggle {
+    background: #f0f2f5;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: var(--primary-blue);
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body.dark-mode .btn-dark-toggle {
+    background: #333;
+    color: #ffca28;
+}
+
+/* Memastikan teks judul rubrik berwarna putih saat dark mode */
+body.dark-mode h2, 
+body.dark-mode #display-category {
+    color: #ffffff !important;
+}
+
+        .news-card {
+            border-radius: 20px;
+            border: none;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(9, 53, 119, 0.15);
+        }
+
+        .news-img-wrapper {
+            height: 200px;
+            overflow: hidden;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .news-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .breadcrumb-item a {
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
+
+        /* Toggle Dark Mode */
+        /* Style tambahan untuk Mode Gelap */
+body.dark-mode {
+    background-color: #121212;
+    color: white;
+}
+
+body.dark-mode .navbar {
+    background-color: #1f1f1f !important;
+}
+
+body.dark-mode .navbar .fw-bold, 
+body.dark-mode .navbar .btn-outline-primary {
+    color: white !important;
+    border-color: white;
+}
+
+body.dark-mode .news-card {
+    background-color: #1f1f1f;
+    color: white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+body.dark-mode .text-muted {
+    color: #bbb !important;
+}
+
+body.dark-mode .breadcrumb-item a,
+body.dark-mode .breadcrumb-item.active {
+    color: #00a8ff !important;
+}
+
+/* Tombol Floating Dark Mode */
+/* Style Tombol di dalam Navbar */
+.nav-dark-toggle {
+    background: #f0f2f5;
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    color: var(--primary-blue);
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body.dark-mode .nav-dark-toggle {
+    background: #333;
+    color: #ffca28; /* Warna kuning matahari */
+}
+
+.nav-dark-toggle:hover {
+    transform: scale(1.1);
+}
+
+body.dark-mode .navbar {
+    background-color: #1f1f1f !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.5); /* Bayangan lebih gelap */
+}
+
+/* Style untuk Running Text / Breaking News */
+.fixed-bottom-ticker {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    background: #111;
+    display: flex;
+    align-items: center;
+    z-index: 9999;
+    overflow: hidden;
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
+.ticker-label {
+    background: #c0392b;
+    color: white;
+    padding: 0 20px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-style: italic;
+    z-index: 10;
+    white-space: nowrap;
+    box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+}
+
+.ticker-wrapper {
+    flex: 1;
+    overflow: hidden;
+}
+
+.ticker-content {
+    display: inline-block;
+    white-space: nowrap;
+    color: #fff;
+    font-size: 0.9rem;
+    padding-left: 100%; /* Mulai dari luar layar kanan */
+    animation: ticker-animation 30s linear infinite;
+}
+
+@keyframes ticker-animation {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+}
+
+.ticker-content:hover {
+    animation-play-state: paused; /* Berhenti saat disentuh */
+}
+        
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="dashboard1.html">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlDuPAN78AL3hp47XodN6gUeyRHCFEHbC3iQ&s" 
+                 alt="Logo" style="border-radius: 50%; width: 45px; height: 45px;" class="me-2">
+            <h1 class="logo-animated" style="font-size: 22px; margin-bottom: 0; font-family: 'Montserrat', sans-serif;">
+                <strong>Hadap<span style="color: #ffcc00;">i </span>Ped<span style="color: #ffcc00;">i</span>a</strong>
+            </h1>
+        </a>
+        
+        <div class="d-flex align-items-center gap-2">
+             <button class="btn btn-outline-secondary rounded-pill" onclick="toggleDarkMode()">
+                    <i class="fas fa-moon"></i> Mode
+                </button>
+
+            
+        </div>
+    </div>
+</nav>
+
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="dashboard1.html">Home</a></li>
+                <li class="breadcrumb-item active" id="breadcrumb-category">Rubrik</li>
+            </ol>
+        </nav>
+        
+        <h2 class="fw-bold mb-4">Rubrik: <span id="display-category" class="text-primary">Memuat...</span></h2>
+
+        <div class="row" id="rubrik-container">
+            <div class="text-center p-5">
+                <div class="spinner-border text-primary" role="status"></div>
+                <p class="mt-2">Mencari berita terbaru...</p>
+            </div>
+        </div>
+    </div>
+
+<div class="fixed-bottom-ticker">
+    <div class="ticker-label">BREAKING NEWS</div>
+    <div class="ticker-wrapper">
+        <div id="running-text" class="ticker-content">
+            Memuat berita terbaru...
+        </div>
+    </div>
+</div>
+
+    <script>
+       const urlParams = new URLSearchParams(window.location.search);
+const kategoriTujuan = urlParams.get('category');
+
+if (kategoriTujuan) {
+    document.getElementById('display-category').innerText = kategoriTujuan;
+    document.getElementById('breadcrumb-category').innerText = kategoriTujuan;
+    document.title = `Rubrik ${kategoriTujuan} - HadapiPedia`;
+}
+
+const SPREADSHEET_ID = '1R7nHOqj8gWoclj93S3bQXUcMhxxsaqHMav3QNsmJn4U';
+const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=Sheet1`;
+
+// --- LOGIKA DARK MODE ---
+function toggleDarkMode() {
+    const body = document.body;
+    const icon = document.getElementById('dark-icon');
+    
+    body.classList.toggle('dark-mode');
+    
+    if (body.classList.contains('dark-mode')) {
+        localStorage.setItem('theme', 'dark');
+        if(icon) icon.classList.replace('fa-moon', 'fa-sun');
+    } else {
+        localStorage.setItem('theme', 'light');
+        if(icon) icon.classList.replace('fa-sun', 'fa-moon');
+    }
+}
+
+// Pastikan ikon juga berubah saat halaman pertama kali dimuat
+window.addEventListener('DOMContentLoaded', () => {
+    const savedTheme = localStorage.getItem('theme');
+    const icon = document.getElementById('dark-icon');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        if(icon) icon.classList.replace('fa-moon', 'fa-sun');
+    }
+    fetchRubrikData(); 
+});
+// --- FUNGSI WAKTU ---
+function timeAgo(dateString) {
+    const now = new Date();
+    const past = new Date(dateString);
+    const diffInSeconds = Math.floor((now - past) / 1000);
+    if (isNaN(diffInSeconds)) return 'Baru saja'; // Jaga-jaga jika format tanggal salah
+    if (diffInSeconds < 60) return 'Baru saja';
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    if (diffInMinutes < 60) return `${diffInMinutes} menit lalu`;
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    if (diffInHours < 24) return `${diffInHours} jam lalu`;
+    const diffInDays = Math.floor(diffInHours / 24);
+    return `${diffInDays} hari lalu`;
+}
+
+// Running Text (Contoh Sederhana)
+// 1. Inisialisasi variabel global untuk menampung data
+let allNewsData = [];
+
+// 2. Fungsi Utama untuk Memuat Running Text
+async function loadRunningText() {
+    try {
+        const response = await fetch(url);
+        const text = await response.text();
+        const json = JSON.parse(text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1));
+        const rows = json.table.rows;
+
+        const runningTextElement = document.getElementById('running-text');
+        
+        // Ambil semua judul dari kolom pertama (index 0)
+        // Kita mulai dari index 1 untuk melewati header spreadsheet
+        const allTitles = rows.slice(1).map(row => {
+            return row.c[0] ? row.c[0].v : '';
+        }).filter(title => title !== '');
+
+        // Gunakan pemisah (Bullet) warna kuning agar kontras
+        const separator = ' <span style="color: #ffcc00; margin: 0 20px;">&#8226;</span> ';
+
+        if (allTitles.length > 0) {
+            runningTextElement.innerHTML = allTitles.join(separator) + separator;
+        }
+    } catch (error) {
+        console.error("Gagal memuat running text:", error);
+    }
+}
+
+// Panggil fungsi ini di dalam event DOMContentLoaded
+document.addEventListener('DOMContentLoaded', () => {
+    // Jalankan pengecekan tema (Dark Mode)
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+    }
+    
+    // Jalankan penarikan data
+    fetchRubrikData(); 
+    loadRunningText(); // Pastikan fungsi ini dipanggil
+});
+
+
+async function fetchRubrikData() {
+    try {
+        const response = await fetch(url);
+        const text = await response.text();
+        const json = JSON.parse(text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1));
+        const rows = json.table.rows;
+        tampilkanBerita(rows);
+    } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('rubrik-container').innerHTML = `<p class="text-center text-danger">Gagal memuat data.</p>`;
+    }
+}
+
+function tampilkanBerita(rows) {
+    const container = document.getElementById('rubrik-container');
+    let htmlContent = '';
+    let found = false;
+
+    rows.forEach((row, index) => {
+        if (index === 0) return;
+
+        const kategoriSheet = row.c[1] ? row.c[1].v.toString().trim() : '';
+        
+
+        if (kategoriTujuan && kategoriSheet.toLowerCase() === kategoriTujuan.toLowerCase()) {
+            found = true;
+            const judul = row.c[0] ? row.c[0].v : 'Tanpa Judul';
+            const deskripsi = row.c[2] ? row.c[2].v : '';
+            const gambar = row.c[3] ? row.c[3].v : 'https://via.placeholder.com/800x400';
+            
+            // PROSES WAKTU DISINI
+            const waktuMentah = row.c[4] ? row.c[4].v : null;
+            const waktuTampil = waktuMentah ? timeAgo(waktuMentah) : 'Baru saja';
+
+            // Pastikan bagian ini di dalam loop tampilkanBerita menggunakan class yang fleksibel
+// Tambahkan cursor:pointer pada style card
+htmlContent += `
+    <div class="col-md-4 mb-4">
+        <div class="card news-card h-100" 
+             onclick="pindahKeDetail('${encodeURIComponent(judul)}')" 
+             style="cursor: pointer;">
+            <div class="news-img-wrapper">
+                <img src="${gambar}" alt="Gambar">
+            </div>
+            <div class="card-body">
+                <h5 class="fw-bold">${judul}</h5> 
+                <p class="small text-muted">${deskripsi.substring(0, 100)}...</p>
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <small class="text-muted"><i class="far fa-clock"></i> ${waktuTampil}</small>
+                    <span class="btn btn-primary btn-sm rounded-pill">Baca Selengkapnya</span>
+                </div>
+            </div>
+        </div>
+    </div>`;
+        }
+    });
+
+    if (!found) {
+        htmlContent = `<div class="col-12 text-center p-5">
+            <i class="fas fa-newspaper fa-3x text-muted mb-3"></i>
+            <p class="text-muted">Belum ada berita di rubrik <strong>${kategoriTujuan}</strong>.</p>
+        </div>`;
+    }
+    container.innerHTML = htmlContent;
+}
+
+function pindahKeDetail(judulTerencode) {
+    // Karena sudah di-encode di tombol, tinggal masukkan ke URL
+    window.location.href = `detail.html?judul=${judulTerencode}`;
+}
+fetchRubrikData();
+    </script>
+    
+</body>
+</html>

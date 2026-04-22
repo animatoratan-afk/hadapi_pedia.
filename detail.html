@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Berita - HadapiPedia</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-blue: #093577;
+            --secondary-red: #c0392b;
+            --dark-bg: #121212;
+            --dark-card: #1e1e1e;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f4f7f6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+       /* Dark Mode Global */
+body.dark-mode {
+    background-color: var(--dark-bg);
+    color: #ffffff !important; /* Semua teks dasar jadi putih */
+}
+
+/* Memastikan semua teks di dalam elemen umum jadi putih */
+body.dark-mode h1, 
+body.dark-mode h2, 
+body.dark-mode h3, 
+body.dark-mode p, 
+body.dark-mode span, 
+body.dark-mode .news-content,
+body.dark-mode .breadcrumb-item.active {
+    color: #ffffff !important;
+}
+
+/* Navbar di Mode Gelap */
+body.dark-mode .navbar {
+    background-color: var(--dark-card) !important;
+    border-bottom: 1px solid #333;
+}
+
+/* Link Breadcrumb dan Link lainnya */
+body.dark-mode a:not(.btn) {
+    color: #00a8ff !important; /* Beri warna biru terang agar tetap terbaca */
+}
+
+body.dark-mode .text-muted {
+    color: #bbb !important; /* Teks abu-abu dibuat lebih terang */
+}
+
+/* Tombol Mode di Navbar agar seragam */
+.btn-dark-toggle {
+    background: #f0f2f5;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: var(--primary-blue);
+    transition: 0.3s;
+}
+
+body.dark-mode .btn-dark-toggle {
+    background: #333;
+    color: #ffca28;
+}
+       /* Styling Navbar Awal (Default) */
+.navbar {
+    background: white !important; /* Standarnya putih solid agar aman */
+    transition: all 0.3s ease-in-out;
+}
+
+/* Efek Transparan Blur saat di-scroll (Sesuai Dashboard) */
+.navbar.scrolled {
+    backdrop-filter: blur(15px) saturate(180%);
+    -webkit-backdrop-filter: blur(15px) saturate(180%);
+    background: rgba(255, 255, 255, 0.75) !important; /* Putih transparan 75% */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Untuk Mode Gelap agar tidak terlalu silau */
+body.dark-mode .navbar.scrolled {
+    background: rgba(30, 30, 30, 0.8) !important; /* Hitam transparan 80% */
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+        /* Animasi Logo */
+        .logo-animated strong {
+            background: linear-gradient(to right, #b50303, #850c0c, #550303, #b50303);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 3s linear infinite;
+        }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        /* Area Konten */
+        .detail-container {
+            margin-top: 120px;
+            margin-bottom: 50px;
+        }
+        .main-img {
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .news-content {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: #333;
+        }
+        body.dark-mode .news-content { color: #ccc; }
+
+        #loader-detail {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 300px;
+        }
+
+        /* Running Text */
+        /* Style untuk Running Text / Breaking News */
+.fixed-bottom-ticker {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    background: #111;
+    display: flex;
+    align-items: center;
+    z-index: 9999;
+    overflow: hidden;
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
+.ticker-label {
+    background: #c0392b;
+    color: white;
+    padding: 0 20px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-style: italic;
+    z-index: 10;
+    white-space: nowrap;
+    box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+}
+
+.ticker-wrapper {
+    flex: 1;
+    overflow: hidden;
+}
+
+.ticker-content {
+    display: inline-block;
+    white-space: nowrap;
+    color: #fff;
+    font-size: 0.9rem;
+    padding-left: 100%; /* Mulai dari luar layar kanan */
+    animation: ticker-animation 30s linear infinite;
+}
+
+@keyframes ticker-animation {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+}
+
+.ticker-content:hover {
+    animation-play-state: paused; /* Berhenti saat disentuh */
+}
+        
+        
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="dashboard1.html">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlDuPAN78AL3hp47XodN6gUeyRHCFEHbC3iQ&s" 
+                 alt="Logo" style="border-radius: 50%; width: 45px; height: 45px;" class="me-2">
+            <h1 class="logo-animated" style="font-size: 22px; margin-bottom: 0;">
+                <strong>Hadap<span style="color: #ffcc00;">i </span>Ped<span style="color: #ffcc00;">i</span>a</strong>
+            </h1>
+        </a>
+        <div class="ms-auto d-flex align-items-center gap-2">
+             <button class="btn btn-outline-secondary rounded-pill" onclick="toggleDarkMode()">
+                    <i class="fas fa-moon"></i> Mode
+                </button>
+        </div>
+    </div>
+</nav>
+
+    <div class="container detail-container">
+        <div id="loader-detail">
+            <div class="spinner-border text-primary" role="status"></div>
+            <span class="ms-3">Memuat berita...</span>
+        </div>
+
+        <div id="berita-wrapper" style="display: none;">
+            <div class="row justify-content-center">
+                <div class="col-lg-9">
+                    <nav aria-label="breadcrumb" class="mb-4">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="dashboard1.html" class="text-decoration-none">Home</a></li>
+                            <li class="breadcrumb-item active" id="breadcrumb-kategori">Kategori</li>
+                        </ol>
+                    </nav>
+
+                    <h1 class="fw-bold mb-3" id="news-title">Judul Berita Sedang Dimuat...</h1>
+                    
+                    <div class="d-flex align-items-center mb-4 text-muted small">
+                        <span class="badge bg-primary me-3" id="news-badge">Kategori</span>
+                        <span><i class="far fa-clock me-1"></i> <span id="news-time">--:--</span></span>
+                    </div>
+
+                    <img src="" id="news-image" class="main-img mb-5" alt="Gambar Berita">
+
+                    <div class="news-content" id="news-body">
+                        </div>
+
+                    
+
+                    <div class="row mt-5 pt-4 border-top">
+    <div class="col-md-6 mb-3">
+        <div id="prev-news-box" style="display: none;">
+            <small class="text-muted text-uppercase fw-bold" style="font-size: 0.7rem;">&larr; Berita Sebelumnya</small>
+            <a href="#" id="prev-news-link" class="d-block fw-bold text-decoration-none mt-1" style="color: var(--primary-blue);">
+                <span id="prev-news-title">Judul Sebelumnya</span>
+            </a>
+        </div>
+    </div>
+    <div class="col-md-6 mb-3 text-md-end">
+        <div id="next-news-box" style="display: none;">
+            <small class="text-muted text-uppercase fw-bold" style="font-size: 0.7rem;">Berita Selanjutnya &rarr;</small>
+            <a href="#" id="next-news-link" class="d-block fw-bold text-decoration-none mt-1" style="color: var(--primary-blue);">
+                <span id="next-news-title">Judul Selanjutnya</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="text-center mt-5">
+    <a href="dashboard1.html" class="btn btn-outline-primary rounded-pill px-4">
+        <i class="fas fa-th-large me-2"></i> Dashboard Utama
+    </a>
+</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div class="fixed-bottom-ticker">
+    <div class="ticker-label">BREAKING NEWS</div>
+    <div class="ticker-wrapper">
+        <div id="running-text" class="ticker-content">
+            Memuat berita terbaru...
+        </div>
+    </div>
+</div>
+
+
+    <script>
+        // 1. Ambil Parameter Judul dari URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const judulDicari = urlParams.get('judul');
+
+        // 2. Konfigurasi Spreadsheet
+        const SPREADSHEET_ID = '1R7nHOqj8gWoclj93S3bQXUcMhxxsaqHMav3QNsmJn4U';
+        const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=berita`;
+
+       async function fetchDetail() {
+    try {
+        const response = await fetch(url);
+        const text = await response.text();
+        const json = JSON.parse(text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1));
+        const allRows = json.table.rows;
+        
+        // 1. Cari data artikel saat ini di seluruh baris
+        const currentArticleRow = allRows.find(r => r.c[0] && r.c[0].v === judulDicari);
+
+        if (currentArticleRow) {
+            const currentKategori = currentArticleRow.c[1] ? currentArticleRow.c[1].v : 'Umum';
+
+            // 2. FILTER: Hanya ambil baris yang kategorinya sama dengan artikel saat ini
+            const filteredRows = allRows.filter(r => r.c[1] && r.c[1].v === currentKategori);
+
+            // 3. Cari indeks artikel saat ini di dalam daftar yang sudah difilter
+            const currentIndex = filteredRows.findIndex(r => r.c[0] && r.c[0].v === judulDicari);
+
+            // Mapping Data Berita Utama
+            const data = {
+                judul: currentArticleRow.c[0] ? currentArticleRow.c[0].v : 'Tanpa Judul',
+                kategori: currentKategori,
+                deskripsi: currentArticleRow.c[2] ? currentArticleRow.c[2].v : '',
+                gambar: currentArticleRow.c[3] ? currentArticleRow.c[3].v : 'https://via.placeholder.com/800x400',
+                waktu: currentArticleRow.c[4] ? currentArticleRow.c[4].v : 'Baru saja'
+            };
+
+            // Tampilkan ke UI
+            document.getElementById('news-title').innerText = data.judul;
+            document.getElementById('breadcrumb-kategori').innerText = data.kategori;
+            document.getElementById('news-badge').innerText = data.kategori;
+            document.getElementById('news-time').innerText = data.waktu;
+            document.getElementById('news-image').src = data.gambar;
+            document.getElementById('news-body').innerHTML = data.deskripsi.replace(/\n/g, '<br>');
+
+            // 4. LOGIKA NAVIGASI (Hanya kategori yang sama)
+            
+            // Sembunyikan box navigasi terlebih dahulu (reset)
+            document.getElementById('prev-news-box').style.display = 'none';
+            document.getElementById('next-news-box').style.display = 'none';
+
+            // Berita Sebelumnya di kategori yang sama (indeks lebih besar/bawah)
+            if (currentIndex < filteredRows.length - 1) {
+                const prevData = filteredRows[currentIndex + 1].c[0].v;
+                document.getElementById('prev-news-box').style.display = 'block';
+                document.getElementById('prev-news-title').innerText = prevData;
+                document.getElementById('prev-news-link').href = `detail.html?judul=${encodeURIComponent(prevData)}`;
+            }
+
+            // Berita Selanjutnya di kategori yang sama (indeks lebih kecil/atas)
+            if (currentIndex > 0) {
+                const nextData = filteredRows[currentIndex - 1].c[0].v;
+                // Pastikan bukan header (biasanya filter sudah membuang header karena kategori berbeda)
+                document.getElementById('next-news-box').style.display = 'block';
+                document.getElementById('next-news-title').innerText = nextData;
+                document.getElementById('next-news-link').href = `detail.html?judul=${encodeURIComponent(nextData)}`;
+            }
+
+            document.getElementById('loader-detail').style.display = 'none';
+            document.getElementById('berita-wrapper').style.display = 'block';
+        } else {
+            document.getElementById('loader-detail').innerHTML = "<h3>Berita tidak ditemukan!</h3>";
+        }
+    } catch (error) {
+        console.error("Error Detail:", error);
+        document.getElementById('loader-detail').innerHTML = "<h3 class='text-danger'>Gagal memuat data.</h3>";
+    }
+}
+        // --- FUNGSI WAKTU ---
+function timeAgo(dateString) {
+    const now = new Date();
+    const past = new Date(dateString);
+    const diffInSeconds = Math.floor((now - past) / 1000);
+    if (isNaN(diffInSeconds)) return 'Baru saja';
+    if (diffInSeconds < 60) return 'Baru saja';
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    if (diffInMinutes < 60) return `${diffInMinutes} menit lalu`;
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    if (diffInHours < 24) return `${diffInHours} jam lalu`;
+    return `${Math.floor(diffInHours / 24)} hari lalu`;
+}
+
+// Running Text (Contoh Sederhana)
+// 1. Inisialisasi variabel global untuk menampung data
+let allNewsData = [];
+
+// 2. Fungsi Utama untuk Memuat Running Text
+async function loadRunningText() {
+    try {
+        const response = await fetch(url);
+        const text = await response.text();
+        const json = JSON.parse(text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1));
+        const rows = json.table.rows;
+
+        const runningTextElement = document.getElementById('running-text');
+        
+        // Ambil semua judul dari kolom pertama (index 0)
+        // Kita mulai dari index 1 untuk melewati header spreadsheet
+        const allTitles = rows.slice(1).map(row => {
+            return row.c[0] ? row.c[0].v : '';
+        }).filter(title => title !== '');
+
+        // Gunakan pemisah (Bullet) warna kuning agar kontras
+        const separator = ' <span style="color: #ffcc00; margin: 0 20px;">&#8226;</span> ';
+
+        if (allTitles.length > 0) {
+            runningTextElement.innerHTML = allTitles.join(separator) + separator;
+        }
+    } catch (error) {
+        console.error("Gagal memuat running text:", error);
+    }
+}
+
+// Panggil fungsi ini di dalam event DOMContentLoaded
+// --- INISIALISASI SAAT HALAMAN DIMUAT ---
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Logika Dark Mode (Cek Tema)
+    const savedTheme = localStorage.getItem('theme');
+    const icon = document.getElementById('dark-icon');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        if(icon) icon.classList.replace('fa-moon', 'fa-sun');
+    }
+    
+    // 2. Jalankan Fungsi Utama
+    fetchDetail();      // Memuat detail berita & navigasi
+    loadRunningText();  // Memuat running text (SUDAH DIPERBAIKI)
+});
+
+// --- LOGIKA DARK MODE ---
+function toggleDarkMode() {
+    const body = document.body;
+    const icon = document.getElementById('dark-icon');
+    body.classList.toggle('dark-mode');
+    
+    if (body.classList.contains('dark-mode')) {
+        localStorage.setItem('theme', 'dark');
+        if(icon) icon.classList.replace('fa-moon', 'fa-sun');
+    } else {
+        localStorage.setItem('theme', 'light');
+        if(icon) icon.classList.replace('fa-sun', 'fa-moon');
+    }
+}
+
+// --- EFEK NAVBAR SCROLL ---
+window.addEventListener('scroll', () => {
+    const nav = document.querySelector('.navbar');
+    if (window.scrollY > 20) {
+        nav.classList.add('scrolled');
+    } else {
+        nav.classList.remove('scrolled');
+    }
+});
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+</body>
+</html>
